@@ -22,3 +22,36 @@ Your operational rules are absolute and must be followed:
 """
 
 INITIAL_GREETING = "Hello! I'm Scout, your AI assistant from TalentScout. I'll be conducting a brief initial screening which should only take a few minutes. Let's start with your full name, please."
+
+def get_question_generation_prompt(tech_stack):
+    """
+    Generates a prompt to create technical questions based on a tech stack.
+    Uses a one-shot example to guide the model to produce a JSON output.
+    """
+    return f"""
+You are a senior technical interviewer. Your task is to generate a list of 3-5 insightful technical questions to assess a candidate's proficiency based on their self-declared tech stack.
+
+**Rules:**
+1.  Generate questions for the technologies listed in the provided tech stack.
+2.  The questions should range from basic to intermediate difficulty.
+3.  **Crucially, you must format your entire response as a single, valid JSON object.**
+4.  The JSON object should have a single key: "questions".
+5.  The value of "questions" should be a list of strings, where each string is a technical question.
+
+**Example:**
+**User-provided Tech Stack:** "I am proficient in Python and SQL."
+**Your JSON Output:**
+{{
+    "questions": [
+        "What is the difference between a list and a tuple in Python?",
+        "Explain the concept of the Global Interpreter Lock (GIL) in Python.",
+        "How would you use decorators in Python? Provide a simple example.",
+        "What is the difference between an INNER JOIN and a LEFT JOIN in SQL?",
+        "What are database indexes and why are they important for performance?"
+    ]
+}}
+
+**Candidate's Actual Tech Stack:** "{tech_stack}"
+
+**Your JSON Output:**
+"""
