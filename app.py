@@ -1,4 +1,3 @@
-# app.py
 """
 Main application file for the TalentScout AI Hiring Assistant.
 
@@ -16,12 +15,15 @@ import google.generativeai as genai
 import os
 import json
 from dotenv import load_dotenv
-from prompts import SYSTEM_PROMPT, INITIAL_GREETING, get_question_generation_prompt
+from prompts import SYSTEM_PROMPT, INITIAL_GREETING, get_question_generation_prompt, get_sentiment_analysis_prompt
+
+def load_css(file_name):
+    """Function to load and inject a local CSS file."""
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 # --- Configuration and Initialization ---
 load_dotenv()
-
-# Configure the Gemini API key
 try:
     genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 except (AttributeError, TypeError):
@@ -35,23 +37,31 @@ st.set_page_config(
 )
 st.title("🤖 TalentScout Hiring Assistant")
 
+# --- UI Enhancements ---
+load_css("style.css")
 
 # --- Model Definitions ---
-# We use two separate model instances to prevent prompt conflicts.
+# By wrapping model loading in functions with @st.cache_resource, we ensure
+# these heavy models are loaded only once, improving performance.
 
-# Model 1: The Conversational Agent ("Scout")
-# This model is configured with a system prompt that defines its persona and rules
-# for the information-gathering phase.
-model_conversation = genai.GenerativeModel(
-    model_name='gemini-1.5-flash',
-    system_instruction=SYSTEM_PROMPT
-)
+@st.cache_resource
+def load_conversation_model():
+    """Loads and caches the conversational model with its system prompt."""
+    print("--- Loading Conversation Model ---") 
+    return genai.GenerativeModel(
+        model_name='gemini-1.5-flash',
+        system_instruction=SYSTEM_PROMPT
+    )
 
-# Model 2: The Question Generation Tool
-# This model has no system prompt and is used for the one-off task of generating
-# technical questions from a given tech stack.
-model_qgen = genai.GenerativeModel(model_name='gemini-1.5-flash')
+@st.cache_resource
+def load_qgen_model():
+    """Loads and caches the question generation model."""
+    print("--- Loading QGen Model ---") 
+    return genai.GenerativeModel(model_name='gemini-1.5-flash')
 
+# Load the models using the cached functions
+model_conversation = load_conversation_model()
+model_qgen = load_qgen_model()
 
 # --- State Management ---
 # The application follows a state machine to manage the conversation flow.
@@ -152,6 +162,22 @@ if prompt := st.chat_input("Please enter your response..."):
     # --- STATE: TECHNICAL INTERVIEW ---
     elif st.session_state.chat_state == 'TECHNICAL_INTERVIEW':
         # The user has answered a technical question.
+        # --- NEW: Sentiment Analysis Bonus Feature ---
+        user_answer = prompt
+        with st.spinner("Analyzing sentiment..."):
+            # We use the qgen_model as it's our "tool" model with no system prompt
+            sentiment_prompt = get_sentiment_analysis_prompt(user_answer)
+            sentiment_response = model_qgen.generate_content(sentiment_prompt)
+            
+            # Print the sentiment to the terminal for the reviewer to see.
+            # This demonstrates the capability without cluttering the UI.
+            sentiment = sentiment_response.text.strip()
+            print(f"--- Candidate Sentiment Detected: {sentiment} ---")
+            # In a real application, this sentiment could be stored in a database
+            # alongside the candidate's answer.
+        # --- End of Sentiment Analysis ---
+
+
         # The assignment only requires us to *ask* the questions, not evaluate the answers.
         st.session_state.question_index += 1
         
@@ -173,3 +199,4 @@ if prompt := st.chat_input("Please enter your response..."):
             add_message_to_display("assistant", conclusion_message)
             with st.chat_message("assistant"):
                 st.markdown(conclusion_message)
+

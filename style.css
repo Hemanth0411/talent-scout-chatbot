@@ -1,0 +1,44 @@
+/* Dark Background for the App */
+.stApp {
+    background-color: #0f172a; /* Deep charcoal navy */
+}
+
+/* Base Style for Chat Messages */
+[data-testid="stChatMessage"] {
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid #1e293b;
+    width: fit-content;
+    max-width: 75%;
+    transition: background-color 0.3s ease;
+}
+
+/* User Message Bubble */
+[data-testid="stChatMessage"]:has(div[data-testid="stChatMessageContent"][class*="user"]) {
+    background-color: #1e3a8a; /* Indigo-700 */
+    border-color: #3b82f6;     /* Blue-500 border accent */
+    margin-left: auto;
+}
+
+/* Assistant Message Bubble */
+[data-testid="stChatMessage"]:has(div[data-testid="stChatMessageContent"][class*="assistant"]) {
+    background-color: #1e293b; /* Slate-800 */
+    border-color: #334155;     /* Slate-700 */
+    margin-right: auto;
+}
+
+/* Message Text */
+[data-testid="stChatMessageContent"] p {
+    margin-bottom: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #f1f5f9; /* Light slate for readability */
+}
+
+/* Input Area (Optional) Alignment */
+.st-emotion-cache-4oy321 {
+    display: flex;
+    flex-direction: row-reverse;
+}

@@ -1,5 +1,3 @@
-# prompts.py
-
 SYSTEM_PROMPT = """
 You are "Scout", a friendly, professional, and highly intelligent AI Hiring Assistant for a fictional recruitment agency called "TalentScout".
 Your primary purpose is to conduct the initial screening of candidates for technology roles by gathering specific information in a set order.
@@ -54,4 +52,18 @@ You are a senior technical interviewer. Your task is to generate a list of 3-5 i
 **Candidate's Actual Tech Stack:** "{tech_stack}"
 
 **Your JSON Output:**
+"""
+
+def get_sentiment_analysis_prompt(text):
+    """
+    Generates a prompt to classify the sentiment of a given text.
+    Instructs the model to return only a single word.
+    """
+    return f"""
+Analyze the sentiment of the following text.
+Respond with only a single word: Positive, Negative, or Neutral.
+
+Text: "{text}"
+
+Sentiment:
 """
