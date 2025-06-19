@@ -83,6 +83,12 @@ To run this application locally, please follow these steps:
 
 ## Usage Guide
 
+You can either run the application locally or access the live deployed version:
+
+### Live Demo
+The application is deployed and accessible at: https://talent-scout-chatbot.streamlit.app/
+
+### Local Setup
 Once the setup is complete, run the Streamlit application from your terminal:
 
 ```bash
