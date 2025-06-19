@@ -1,10 +1,7 @@
-/* style.css */
-
 .stApp {
-    background-color: #f0f9ff; /* Light blue background */
+    background-color: #f0f9ff; 
 }
 
-/* Title styling */
 [data-testid="stAppViewContainer"] h1 {
     color: #1e293b !important;
     font-weight: 700 !important;
@@ -14,7 +11,6 @@
     border-bottom: 2px solid #3b82f6;
 }
 
-/* Base style for all chat messages */
 [data-testid="stChatMessage"] {
     border-radius: 16px;
     padding: 1rem 1.25rem;
@@ -26,36 +22,30 @@
     transition: background-color 0.3s ease;
 }
 
-/* Style for the user's message bubble */
 [data-testid="stChatMessage"]:has(div[data-testid="stChatMessageContent"][class*="user"]) {
-    background-color: #1d70f6; /* A stronger blue for the user background */
+    background-color: #1d70f6;
     border-color: #2563eb;     
     margin-left: auto;
 }
 
-/* Style for the assistant's message bubble */
+
 [data-testid="stChatMessage"]:has(div[data-testid="stChatMessageContent"][class*="assistant"]) {
-    background-color: #f1f5f9; /* A neutral, light gray for the assistant */
+    background-color: #f1f5f9;
     border-color: #e2e8f0;      
     margin-right: auto;
 }
 
-/* --- KEY CHANGE IS HERE --- */
-/* This new, more specific rule sets the text color ONLY for the user's messages to white. */
 [data-testid="stChatMessage"]:has(div[data-testid="stChatMessageContent"][class*="user"]) p {
-    color: #ffffff; /* White text for user messages */
+    color: #ffffff; 
 }
-/* --- END OF KEY CHANGE --- */
 
-/* Default text color for all other paragraphs (primarily for the assistant) */
 [data-testid="stChatMessageContent"] p {
     margin-bottom: 0;
     font-size: 1rem;
     line-height: 1.6;
-    color: #1e293b; /* Dark text for good readability on light backgrounds */
+    color: #1e293b;
 }
 
-/* Fix for avatar alignment if needed */
 .st-emotion-cache-4oy321 {
     display: flex;
     flex-direction: row-reverse;
