@@ -37,7 +37,7 @@ st.set_page_config(
 )
 st.title("🤖 TalentScout Hiring Assistant")
 
-# --- UI Enhancements ---
+
 load_css("style.css")
 
 # --- Model Definitions ---
